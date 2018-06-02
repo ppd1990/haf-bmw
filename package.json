@@ -1,0 +1,19 @@
+{
+  "name": "haf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Maximilian Federle",
+  "license": "MIT",
+  "dependencies": {
+    "config": "^1.30.0",
+    "logitech-g29": "^1.0.9",
+    "node-config": "0.0.2",
+    "node-pid-controller": "^1.0.1",
+    "socketcan": "^2.2.2"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "canInterface": "vcan0",
+  "serialPort": "/dev/ttyACM0",
+  "baudRate": 9600
+}
