@@ -1,6 +1,7 @@
 const g = require("logitech-g29")
 const can = require("socketcan")
 const config = require("config")
+const dgramAsPromised = require("dgram-as-promised")
 const SteeringWheel = require("./SteeringWheel")
 const LEDDisplay = require("./LEDDisplay")
 const SteeringDataDisplay = require("./SteeringDataDisplay")
@@ -9,6 +10,9 @@ const { steeringAngleDeg, signalSteeringAngle } = require("./canBMW")
 
 const accelerationLEDs = config.get("accelerationLEDs")
 const steeringWheelLEDs = config.get("steeringWheelLEDs")
+
+const abkHost = config.get("abkHost")
+const abkPort = config.get("abkPort")
 
 const steeringWheelConfig = config.get("steeringWheel")
 const steeringWheel = new SteeringWheel(steeringWheelConfig) // config.get("steeringWheel")
@@ -29,6 +33,11 @@ g.on("wheel-button_spinner", async pressed => {
   if (pressed) {
     return
   }
+  const socket = dgramAsPromised.createSocket("udp4")
+  const msg = Buffer.from("DEST[KOMBI]MSG[BUTTON]PARAM[PRESENTER[1]]")
+  await socket.send(msg, 0, msg.length, abkPort, abkHost)
+  await socket.close()
+
   hafEnabled = !hafEnabled;
   if (hafEnabled) {
     g.leds(0)
