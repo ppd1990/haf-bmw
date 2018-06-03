@@ -2,14 +2,14 @@
 
 ## Hardware setup
 
-1. Attach 5V power source to V+ and GND of the LED strips.
-2. Connect power GND and Arduino GND
+1. Attach 5V DC power source to V+ and GND of the LED strips.
+2. Connect power GND to Arduino GND
 3. Connect steering wheel position (long) LED strip DATA to Arduino port 6
 4. Connect indicator (short) LED strip DATA to Arduino port 7
 5. Connect Arduino to Raspberry (USB)
 6. Connect G29 steering wheel power input
 7. Connect G29 steering wheel to Raspberry (USB)
-8. Connect PICAN2 to CAN BUS (CAN_H, CAN_L, GND)
+8. Connect PICAN2 to CAN bus (CAN_H, CAN_L, GND)
 
 ## Installation
 

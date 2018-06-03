@@ -8,12 +8,14 @@
     "friction": 0.3,
     "highSpeedTurningForce": 0.45,
     "controllerThreshold": 10,
-    "angleTolerance": 1,
+    "angleTolerance": 100,
     "k_p": 0.08,
     "k_i": 0.0003,
     "k_d": 0.0001,
     "range": 900
   },
   "abkHost": "10.0.34.106",
-  "abkPort": "4050"
+  "abkPort": "4050",
+  "minDegreesDisplay": 360,
+  "maxDegreesDisplay": 540
 }

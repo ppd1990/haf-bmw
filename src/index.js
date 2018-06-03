@@ -11,6 +11,10 @@ const { steeringAngleDeg, signalSteeringAngle } = require("./canBMW")
 const accelerationLEDs = config.get("accelerationLEDs")
 const steeringWheelLEDs = config.get("steeringWheelLEDs")
 
+const minDegreesDisplay = config.get("minDegreesDisplay")
+const maxDegreesDisplay = config.get("maxDegreesDisplay")
+const displayRange = maxDegreesDisplay - minDegreesDisplay
+
 const abkHost = config.get("abkHost")
 const abkPort = config.get("abkPort")
 
@@ -89,8 +93,14 @@ g.on("pedals-brake", pressure => {
 const { range = 900 } = steeringWheelConfig
 let lastWheelPosition = null
 g.on("wheel-turn", angle => {
-  const degrees = (angle / 100 * range ) % 360
-  const position = Math.round(degrees / 360 * steeringWheelLEDs)
+  const degrees = angle / 100 * range
+  let degreesToDisplay = degrees - minDegreesDisplay
+  if (degreesToDisplay < 0) {
+    degreesToDisplay = 0
+  } else if (degreesToDisplay > displayRange) {
+    degreesToDisplay = displayRange
+  }
+  const position = Math.round(degreesToDisplay / displayRange * steeringWheelLEDs)
   lastWheelPosition = position
   if (hafEnabled) {
     return
