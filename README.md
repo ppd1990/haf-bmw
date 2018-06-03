@@ -1,4 +1,15 @@
-# HAF marionette system
+# HAF-BMW marionette system
+
+## Hardware setup
+
+1. Attach 5V power source to V+ and GND of the LED strips.
+2. Connect power GND and Arduino GND
+3. Connect steering wheel position (long) LED strip DATA to Arduino port 6
+4. Connect indicator (short) LED strip DATA to Arduino port 7
+5. Connect Arduino to Raspberry (USB)
+6. Connect G29 steering wheel power input
+7. Connect G29 steering wheel to Raspberry (USB)
+8. Connect PICAN2 to CAN BUS (CAN_H, CAN_L, GND)
 
 ## Installation
 
@@ -41,7 +52,16 @@ SocketCAN interface, e.g. ```can0```
 Serial port where the LED driver board is to befound. E.g. ```/dev/ttyACM0```
 
 ### ```baudRate```
-Baud rate of the serial port. Default ```9600```
+Baud rate of the serial port. Default ```115200```
+
+### ```accelerationLEDs```
+Number of LEDs to use for one half of the acceleration bar display.
+It will use ```2 * accelerationLEDs + 1``` for the whole display.
+Must confirm to arduino settings.
+
+### ```steeringWheelLEDs```
+Number of LEDs to use for the steering wheel position indicator.
+Must confirm to arduino settings.
 
 
 
@@ -59,8 +79,13 @@ sudo ip link set up vcan0
 canplayer vcan0=can0 -I ../candump-2018-05-26_164900.log
 ```
 
-### PICAN2
+#### PICAN2
 
 ```
 sudo /sbin/ip link set can0 up type can bitrate 500000
+```
+
+### Run haf-bmw
+```
+node src/index.js
 ```

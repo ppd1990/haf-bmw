@@ -2,50 +2,97 @@ const g = require("logitech-g29")
 const can = require("socketcan")
 const config = require("config")
 const SteeringWheel = require("./SteeringWheel")
+const LEDDisplay = require("./LEDDisplay")
+const SteeringDataDisplay = require("./SteeringDataDisplay")
+const Blinker = require("./Blinker")
 const { steeringAngleDeg, signalSteeringAngle } = require("./canBMW")
 
-const steeringWheel = new SteeringWheel()
+const accelerationLEDs = config.get("accelerationLEDs")
+const steeringWheelLEDs = config.get("steeringWheelLEDs")
 
-class LEDController {
-  constructor(port, baudrate) {
-    this.port = port
-    this.baudrate = baudrate
-  }
+const steeringWheelConfig = config.get("steeringWheel")
+const steeringWheel = new SteeringWheel(steeringWheelConfig) // config.get("steeringWheel")
 
-  connect() {
+const ledDisplay = new LEDDisplay(
+  config.get("serialPort"),
+  config.get("baudRate")
+)
 
-  }
-}
+const steeringDataDisplay = new SteeringDataDisplay(ledDisplay, 30)
 
-g.on("wheel-button_spinner", on => {
-  console.log("haf an & aus", on)
+const blinker = new Blinker({
+  display: steeringDataDisplay
 })
 
+let hafEnabled = false
+g.on("wheel-button_spinner", async pressed => {
+  if (pressed) {
+    return
+  }
+  hafEnabled = !hafEnabled;
+  if (hafEnabled) {
+    g.leds(0)
+    steeringDataDisplay.acceleration = 0
+    steeringDataDisplay.blinkerLeft = false
+    steeringDataDisplay.blinkerRight = false
+    steeringDataDisplay.wheelPosition = -1
+  } else {
+    g.leds(1)
+    steeringDataDisplay.wheelPosition = lastWheelPosition
+  }
+})
+
+
 g.on("wheel-button_l3", on => {
-  console.log("links blinken")
+  if (hafEnabled) {
+    return
+  }
+  if (on) {
+    blinker.start("left")
+  }
 })
 
 g.on("wheel-button_r3", on => {
-  console.log("rechts blinken")
+  if (hafEnabled) {
+    return
+  }
+  if (on) {
+    blinker.start("right")
+  }
 })
 
 g.on("pedals-gas", pressure => {
-  console.log("gas")
+  if (hafEnabled) {
+    return
+  }
+  const leds = Math.round(pressure * (accelerationLEDs + 1))
+  steeringDataDisplay.acceleration = +leds
 })
 
 g.on("pedals-brake", pressure => {
-  console.log("brake")
+  if (hafEnabled) {
+    return
+  }
+  const leds = Math.round(pressure * (accelerationLEDs + 1))
+  steeringDataDisplay.acceleration = -leds
 })
 
+const { range = 900 } = steeringWheelConfig
+let lastWheelPosition = null
 g.on("wheel-turn", angle => {
-  // console.log(steeringWheel.currentAngleDeg)
+  const degrees = (angle / 100 * range ) % 360
+  const position = Math.round(degrees / 360 * steeringWheelLEDs)
+  lastWheelPosition = position
+  if (hafEnabled) {
+    return
+  }
+  steeringDataDisplay.wheelPosition = position
 })
 
 const channel = can.createRawChannel(config.get("canInterface"), true)
 
 channel.addListener("onMessage", msg => {
   const { id, data } = msg
-
   if (id !== 769) { // 0x301
     return
   }
@@ -53,4 +100,15 @@ channel.addListener("onMessage", msg => {
   steeringWheel.turnToDeg(steeringAngleBMW)
 })
 
-steeringWheel.connect().then(() => channel.start())
+const init = async () => {
+  console.log("HAF marionette system")
+  await Promise.all([
+    steeringWheel.connect(),
+    ledDisplay.connect()
+  ])
+  g.leds(1)
+  steeringDataDisplay.start()
+  channel.start()
+}
+
+init().catch(e => console.error(e))

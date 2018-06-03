@@ -1,5 +1,17 @@
 {
   "canInterface": "vcan0",
   "serialPort": "/dev/ttyACM0",
-  "baudRate": 9600
+  "baudRate": 115200,
+  "accelerationLEDs": 11,
+  "steeringWheelLEDs": 114,
+  "steeringWheel": {
+    "friction": 0.3,
+    "highSpeedTurningForce": 0.45,
+    "controllerThreshold": 10,
+    "angleTolerance": 100,
+    "k_p": 0.08,
+    "k_i": 0.0003,
+    "k_d": 0.0001,
+    "range": 900
+  }
 }

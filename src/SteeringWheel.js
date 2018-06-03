@@ -86,13 +86,15 @@ class SteeringWheel {
     const diffAngle = this.targetAngle - this.currentAngle
     const absDiffAngle = Math.abs(diffAngle)
     this.turningDirection = diffAngle <= 0 ? 1 : -1 // 1 ist left, -1 is right
-    const force = this.steeringAngleController.update(absDiffAngle)
     if (absDiffAngle < angleTolerance) {
       this.turningDirection = 0
+      this.steeringAngleController.reset()
       return g.forceConstant()
     } else if (absDiffAngle < controllerThreshold) {
+      const force = this.steeringAngleController.update(absDiffAngle)
       g.forceConstant(0.5 + this.turningDirection * force)
     } else {
+      this.steeringAngleController.reset()
       g.forceConstant(0.5 - this.turningDirection * highSpeedTurningForce)
     }
   }
