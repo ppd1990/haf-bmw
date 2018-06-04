@@ -19,7 +19,7 @@ Use node v8. Not v10 and above. SocketCAN does not compile otherwise.
 create ```/etc/udev/rules.d/99-hidraw-permissions.rules``` with
 content
 ```
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="plugdev"
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="plugdev", TAG+="systemd"
 ```
 
 ### Fix permissions for user access of arduino in Ubuntu/Debian
