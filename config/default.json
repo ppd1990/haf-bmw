@@ -1,5 +1,5 @@
 {
-  "canInterface": "vcan0",
+  "canInterface": "can0",
   "serialPort": "/dev/ttyACM0",
   "baudRate": 115200,
   "accelerationLEDs": 11,
@@ -14,7 +14,7 @@
     "k_d": 0.0001,
     "range": 900
   },
-  "abkHost": "10.0.34.106",
+  "abkHost": "10.0.66.18",
   "abkPort": "4050",
   "minDegreesDisplay": 360,
   "maxDegreesDisplay": 540
