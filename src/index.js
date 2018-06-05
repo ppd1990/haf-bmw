@@ -116,7 +116,7 @@ channel.addListener("onMessage", msg => {
     return
   }
   const steeringAngleBMW = steeringAngleDeg(signalSteeringAngle(data))
-  steeringWheel.turnToDeg(steeringAngleBMW)
+  steeringWheel.turnToDeg(-steeringAngleBMW)
 })
 
 const init = async () => {
