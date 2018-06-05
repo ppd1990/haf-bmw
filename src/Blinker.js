@@ -2,7 +2,7 @@ class Blinker {
   constructor(cfg = {}) {
     const {
       display,
-      resetInterval = 6000
+      resetInterval = 3000
     } = cfg
 
     this.display = display
