@@ -58,7 +58,7 @@ class Timer {
 
 class Blinker {
   public:
-    Blinker(Strip& strip, unsigned int offset = 0, unsigned int length = 3, uint32_t color = 0xffff00) : offset(offset), length(length), strip(strip), color(color) {}
+    Blinker(Strip& strip, unsigned int offset = 0, unsigned int length = 3, uint32_t color = 0x808000) : offset(offset), length(length), strip(strip), color(color) {}
     void toggle() {
       set(!on);
     }
@@ -225,7 +225,7 @@ void setBlinkers(int state) {
 }
 
 void setAcceleration(int leds) {
-  uint32_t color = leds < 0 ? 0xff0000 : 0x228b22;
+  uint32_t color = leds < 0 ? 0x800000 : 0x114611;
   leds = leds < 0 ? -leds : leds;
   accelerationBar.set(leds, color);
 }
