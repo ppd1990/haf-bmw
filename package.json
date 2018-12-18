@@ -5,6 +5,9 @@
   "main": "src/index.js",
   "keywords": [],
   "author": "Maximilian Federle <max.federle@linergy.de>",
+  "contributors": [
+    "Susanna Suchan"
+  ],
   "license": "MIT",
   "dependencies": {
     "config": "^1.30.0",
